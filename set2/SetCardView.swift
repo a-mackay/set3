@@ -8,21 +8,37 @@
 
 import UIKit
 
+@IBDesignable
 class SetCardView: UIView {
-    private let shape: Shape = Shape.circle
-    private let number: Number = Number.one
-    private let shading: Shading = Shading.semitransparent
-    private let color: Color = Color.blue
+    @IBInspectable
+    private var shape: Shape = Shape.triangle // TODO didSet needsDisplay, needsLayout
+    @IBInspectable
+    private var number: Number = Number.three
+    @IBInspectable
+    private var shading: Shading = Shading.semitransparent
+    @IBInspectable
+    private var color: Color = Color.blue
     
     override func draw(_ rect: CGRect) {
         let cardSize = getCardBounds(fromBounds: self.bounds)
         let cardPath = UIBezierPath(roundedRect: cardSize, cornerRadius: cardSize.width * Constants.cornerRadiusRatio)
         
-//        let symbolsAreaBounds = cardSize.insetBy(dx: Constants.cardSymbolAreaInset * cardSize.width, dy: Constants.cardSymbolAreaInset * cardSize.height)
-        let symbolsGrid = Grid(layout: Grid.Layout.dimensions(rowCount: 3, columnCount: 1), frame: frame)
-        UIColor.black.setFill()
+        let symbolsAreaBounds = cardSize.insetBy(dx: Constants.cardSymbolAreaInset * cardSize.width, dy: Constants.cardSymbolAreaInset * cardSize.height)
+        let symbolBounds = SymbolBounds.splitIntoSymbolBounds(symbolsAreaBounds)
+        UIColor.white.setFill()
         cardPath.fill()
-        drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: self.bounds)
+        
+        switch number {
+        case .one:
+            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.middle)
+        case .two:
+            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.top)
+            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.bottom)
+        case .three:
+            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.top)
+            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.middle)
+            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.bottom)
+        }
     }
     
     private func getCardBounds(fromBounds bounds: CGRect) -> CGRect {
@@ -41,33 +57,40 @@ class SetCardView: UIView {
             return bounds
         }
     }
+
     
-    private func getCardFrame(fromFrame frame: CGRect, andCardBounds cardBounds: CGRect) -> CGRect {
-        // TODO
-        convert
-        return CGRect(origin: frame.origin, size: cardBounds.size)
-    }
-    
-    private func getPath(forShape shape: Shape, withinBounds bounds: CGRect) -> UIBezierPath {
+    private func getPath(forShape shape: Shape, withinBounds squareBounds: CGRect) -> UIBezierPath {
         switch shape {
         case .circle:
-            return UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: bounds.midY), radius: bounds.width / 2, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
+            return UIBezierPath(arcCenter: CGPoint(x: squareBounds.midX, y: squareBounds.midY), radius: squareBounds.width / 2, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
         case .triangle:
             let path = UIBezierPath()
-            path.move(to: CGPoint(x: bounds.midX, y: Constants.equilateralTriangleHeightOffset * bounds.height))
-            path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.maxY - Constants.equilateralTriangleHeightOffset * bounds.height))
-            path.addLine(to: CGPoint(x: bounds.minX, y: bounds.maxY - Constants.equilateralTriangleHeightOffset * bounds.height))
+            path.move(to: CGPoint(x: squareBounds.midX, y: squareBounds.minY + Constants.equilateralTriangleHeightOffset * squareBounds.height))
+            path.addLine(to: CGPoint(x: squareBounds.maxX, y: squareBounds.maxY - Constants.equilateralTriangleHeightOffset * squareBounds.height))
+            path.addLine(to: CGPoint(x: squareBounds.minX, y: squareBounds.maxY - Constants.equilateralTriangleHeightOffset * squareBounds.height))
             path.close()
             return path
         case .square:
-            return UIBezierPath(rect: bounds)
+            return UIBezierPath(rect: squareBounds)
         }
     }
     
-    private func drawSymbol(withShape shape: Shape, andShading shading: Shading, andColor color: Color, withinBounds bounds: CGRect) {
-        let insetBounds = bounds.insetBy(dx: Constants.symbolInset * bounds.width, dy: Constants.symbolInset * bounds.height)
-        let path = getPath(forShape: shape, withinBounds: insetBounds)
-        path.lineWidth = Constants.strokeWidth * insetBounds.width
+    private func drawSymbol(withShape shape: Shape, andShading shading: Shading, andColor color: Color, withinBounds b: CGRect) {
+        let insetBounds = b.insetBy(dx: Constants.symbolInset * b.width, dy: Constants.symbolInset * b.height)
+        var squareInsetBounds: CGRect? = nil
+        if insetBounds.width >= insetBounds.height {
+            let newWidth = insetBounds.height
+            let widthDifference = abs(newWidth - insetBounds.width)
+            let widthInset = widthDifference / 2
+            squareInsetBounds = insetBounds.insetBy(dx: widthInset, dy: 0)
+        } else {
+            let newHeight = insetBounds.width
+            let heightDifference = abs(newHeight - insetBounds.height)
+            let heightInset = heightDifference / 2
+            squareInsetBounds = insetBounds.insetBy(dx: 0, dy: heightInset)
+        }
+        let path = getPath(forShape: shape, withinBounds: squareInsetBounds!)
+        path.lineWidth = Constants.strokeWidth * squareInsetBounds!.width
         let uiColor = color.toColor()
         uiColor.setStroke()
         
@@ -84,25 +107,48 @@ class SetCardView: UIView {
         path.stroke()
     }
     
-    private enum Shape {
+    private struct SymbolBounds {
+        let top: CGRect
+        let middle: CGRect
+        let bottom: CGRect
+        
+        static func splitIntoSymbolBounds(_ symbolAreaBounds: CGRect) -> SymbolBounds {
+            let width = symbolAreaBounds.width
+            let height = symbolAreaBounds.height
+            let minX = symbolAreaBounds.minX
+            let minY = symbolAreaBounds.minY
+            let newHeight = height / 3
+            
+            let top = CGRect(x: minX, y: minY, width: width, height: newHeight)
+            let middle = CGRect(x: minX, y: minY + newHeight, width: width, height: newHeight)
+            let bottom = CGRect(x: minX, y: minY + 2 * newHeight, width: width, height: newHeight)
+            return SymbolBounds(top: top, middle: middle, bottom: bottom)
+        }
+    }
+    
+    @objc
+    private enum Shape: Int {
         case circle
         case triangle
         case square
     }
     
+    @objc
     private enum Number: Int {
         case one = 1
         case two = 2
         case three = 3
     }
     
-    private enum Shading {
+    @objc
+    private enum Shading: Int {
         case outline
         case filled
         case semitransparent
     }
     
-    private enum Color {
+    @objc
+    private enum Color: Int {
         case orange
         case green
         case blue
@@ -120,11 +166,10 @@ class SetCardView: UIView {
 }
 
 fileprivate struct Constants {
-    static let symbolsAreaToCardBounds: CGFloat = 0.75
     static let symbolInset: CGFloat = 0.1
     static let alphaComponent: CGFloat = 0.45
     static let strokeWidth: CGFloat = 0.05
-    static let equilateralTriangleHeightOffset: CGFloat = 0.12
+    static let equilateralTriangleHeightOffset: CGFloat = 0.06
     
     static let cardRatio: CGFloat = 0.66 // card width to height
     static let cornerRadiusRatio: CGFloat = 0.18 // card width to corner radius
