@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina4_7" orientation="portrait">
+    <device id="ipad9_7" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -14,28 +14,70 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="set2" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <view key="view" contentMode="scaleToFill" id="yQO-Nd-Zw5">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fRo-vM-zln" customClass="SetCardView" customModule="set2" customModuleProvider="target">
-                                <rect key="frame" x="104" y="204" width="166" height="259"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="VcI-dB-oEC">
+                                <rect key="frame" x="20" y="20" width="984" height="748"/>
+                                <subviews>
+                                    <view alpha="0.10000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PMp-pN-GPf">
+                                        <rect key="frame" x="0.0" y="0.0" width="984" height="663.5"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="26" translatesAutoresizingMaskIntoConstraints="NO" id="nLf-Aa-dt9">
+                                        <rect key="frame" x="391" y="671.5" width="202" height="76.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uyN-Rw-iek">
+                                                <rect key="frame" x="69" y="0.0" width="64" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="34" translatesAutoresizingMaskIntoConstraints="NO" id="spA-Lg-MhS">
+                                                <rect key="frame" x="0.0" y="46.5" width="202" height="30"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IvN-2b-OeJ">
+                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
+                                                        <state key="normal" title="New Game"/>
+                                                        <connections>
+                                                            <action selector="touchNewGameButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vaB-NV-l5d"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hDa-MC-KzW">
+                                                        <rect key="frame" x="109" y="0.0" width="93" height="30"/>
+                                                        <state key="normal" title="Draw 3 Cards"/>
+                                                        <connections>
+                                                            <action selector="touchDraw3CardsButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NCq-YD-GMk"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="PMp-pN-GPf" firstAttribute="width" secondItem="VcI-dB-oEC" secondAttribute="width" id="p7a-F7-H0Z"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
-                        <color key="backgroundColor" red="0.53949378451046015" green="0.57235220587342717" blue="0.63707566624365475" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" red="0.56441429443185676" green="0.72279062502014058" blue="0.81472081218274117" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="fRo-vM-zln" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="249" id="CHC-bl-7X1"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="fRo-vM-zln" secondAttribute="bottom" constant="270" id="DXZ-jd-cyf"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="fRo-vM-zln" secondAttribute="trailing" constant="68" id="IC2-jT-GN9"/>
-                            <constraint firstItem="fRo-vM-zln" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="67" id="k5z-2U-aRF"/>
+                            <constraint firstItem="G3P-3A-KFX" firstAttribute="bottom" secondItem="VcI-dB-oEC" secondAttribute="bottom" id="AUO-t9-ek1"/>
+                            <constraint firstItem="G3P-3A-KFX" firstAttribute="trailing" secondItem="VcI-dB-oEC" secondAttribute="trailing" constant="20" id="M2I-0T-Cn2"/>
+                            <constraint firstItem="VcI-dB-oEC" firstAttribute="top" secondItem="G3P-3A-KFX" secondAttribute="top" id="a0n-Pt-B9Q"/>
+                            <constraint firstItem="VcI-dB-oEC" firstAttribute="leading" secondItem="G3P-3A-KFX" secondAttribute="leading" constant="20" id="nDP-2W-RZl"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <viewLayoutGuide key="safeArea" id="G3P-3A-KFX"/>
                     </view>
+                    <connections>
+                        <outlet property="GridView" destination="PMp-pN-GPf" id="4ve-uI-AYc"/>
+                        <outlet property="ScoreLabel" destination="uyN-Rw-iek" id="Wx6-ox-tdd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-79.200000000000003" y="132.68365817091455"/>
+            <point key="canvasLocation" x="-79.710144927536234" y="132.58928571428572"/>
         </scene>
     </scenes>
 </document>
