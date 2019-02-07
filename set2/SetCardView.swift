@@ -11,13 +11,21 @@ import UIKit
 @IBDesignable
 class SetCardView: UIView {
     @IBInspectable
-    private var shape: Shape = Shape.triangle // TODO didSet needsDisplay, needsLayout
+    private var shape: Shape = Shape.triangle {
+        didSet { setNeedsDisplay() }
+    }
     @IBInspectable
-    private var number: Number = Number.three
+    private var number: Number = Number.two {
+        didSet { setNeedsDisplay() }
+    }
     @IBInspectable
-    private var shading: Shading = Shading.semitransparent
+    private var shading: Shading = Shading.semitransparent {
+        didSet { setNeedsDisplay() }
+    }
     @IBInspectable
-    private var color: Color = Color.blue
+    private var color: Color = Color.blue {
+        didSet { setNeedsDisplay() }
+    }
     
     override func draw(_ rect: CGRect) {
         let cardSize = getCardBounds(fromBounds: self.bounds)
@@ -33,7 +41,7 @@ class SetCardView: UIView {
             drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.middle)
         case .two:
             drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.top)
-            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.bottom)
+            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.middle)
         case .three:
             drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.top)
             drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.middle)
