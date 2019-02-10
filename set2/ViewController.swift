@@ -29,17 +29,27 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         setGame.dealStartingCards()
+        let x = gridView.bounds
+        let y = gridView.frame
+        drawCardsInPlay()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        let x = gridView.bounds
+        let y = gridView.frame
         drawCardsInPlay()
     }
     
     override func viewDidLayoutSubviews() {
+        let x = gridView.bounds
+        let y = gridView.frame
         drawCardsInPlay()
     }
     
     private func drawCardsInPlay() {
         gridView.subviews.forEach() { $0.removeFromSuperview() }
         
-        var cardGrid = Grid(layout: Grid.Layout.aspectRatio(Constants.cardRatio), frame: gridView.bounds)
+        var cardGrid = Grid(layout: Grid.Layout.aspectRatio(Constants.cardRatio), frame: gridView.frame)
         let cardCount = setGame.cardsInPlay.count
         cardGrid.cellCount = cardCount
         
