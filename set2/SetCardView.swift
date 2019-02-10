@@ -11,20 +11,58 @@ import UIKit
 @IBDesignable
 class SetCardView: UIView {
     @IBInspectable
-    private var shape: Shape = Shape.triangle {
+    private var shape: Shape = Shape.circle {
         didSet { setNeedsDisplay() }
     }
     @IBInspectable
-    private var number: Number = Number.two {
+    private var number: Number = Number.one {
         didSet { setNeedsDisplay() }
     }
     @IBInspectable
-    private var shading: Shading = Shading.semitransparent {
+    private var shading: Shading = Shading.filled {
         didSet { setNeedsDisplay() }
     }
     @IBInspectable
     private var color: Color = Color.blue {
         didSet { setNeedsDisplay() }
+    }
+    
+    func setVisualProperties(fromAttributes attributes: [Int]) {
+        let shapeNum = attributes[0]
+        let numberNum = attributes[1]
+        let shadingNum = attributes[2]
+        let colorNum = attributes[3]
+        
+        switch shapeNum {
+        case 0: self.shape = Shape.triangle
+        case 1: self.shape = Shape.circle
+        case 2: self.shape = Shape.square
+        default: fatalError("Invalid shape number :\(shapeNum)")
+        }
+        
+        switch numberNum {
+        case 0: self.number = Number.one
+        case 1: self.number = Number.two
+        case 2: self.number = Number.three
+        default: fatalError("Invalid number number :\(numberNum)")
+        }
+        
+        switch shadingNum {
+        case 0: self.shading = Shading.filled
+        case 1: self.shading = Shading.outline
+        case 2: self.shading = Shading.semitransparent
+        default: fatalError("Invalid shading number :\(shadingNum)")
+        }
+        
+        switch colorNum {
+        case 0: self.color = Color.blue
+        case 1: self.color = Color.orange
+        case 2: self.color = Color.green
+        default: fatalError("Invalid color number :\(colorNum)")
+        }
+        
+        self.backgroundColor = UIColor.clear
+        self.isOpaque = false
     }
     
     override func draw(_ rect: CGRect) {
@@ -173,13 +211,13 @@ class SetCardView: UIView {
     
 }
 
-fileprivate struct Constants {
-    static let symbolInset: CGFloat = 0.1
-    static let alphaComponent: CGFloat = 0.45
-    static let strokeWidth: CGFloat = 0.05
-    static let equilateralTriangleHeightOffset: CGFloat = 0.06
+internal struct Constants {
+    fileprivate static let symbolInset: CGFloat = 0.1
+    fileprivate static let alphaComponent: CGFloat = 0.45
+    fileprivate static let strokeWidth: CGFloat = 0.05
+    fileprivate static let equilateralTriangleHeightOffset: CGFloat = 0.06
     
-    static let cardRatio: CGFloat = 0.66 // card width to height
-    static let cornerRadiusRatio: CGFloat = 0.18 // card width to corner radius
-    static let cardSymbolAreaInset: CGFloat = 0.1
+    internal static let cardRatio: CGFloat = 0.66 // card width to height
+    fileprivate static let cornerRadiusRatio: CGFloat = 0.18 // card width to corner radius
+    fileprivate static let cardSymbolAreaInset: CGFloat = 0.1
 }
