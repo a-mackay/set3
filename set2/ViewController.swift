@@ -9,63 +9,44 @@
 import UIKit
 
 class ViewController: UIViewController {
-    private var setGame = SetGame() {
-        didSet { drawCardsInPlay() }
-    }
+    private var setGame = SetGame()
 
-    @IBOutlet weak var gridView: UIView!
+    @IBOutlet weak var gridView: GridView!
     
     @IBOutlet weak var scoreLabel: UILabel!
     
     @IBAction func touchNewGameButton(_ sender: UIButton) {
-        print("newgame")
+        setGame = SetGame()
+        setGame.dealStartingCards()
+        drawCardsInPlay()
     }
     
     @IBAction func touchDraw3CardsButton(_ sender: UIButton) {
-        print("draw 3")
+        setGame.dealThreeCards()
+        drawCardsInPlay()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         setGame.dealStartingCards()
-        let x = gridView.bounds
-        let y = gridView.frame
-        drawCardsInPlay()
-    }
-    
-    override func viewWillLayoutSubviews() {
-        let x = gridView.bounds
-        let y = gridView.frame
         drawCardsInPlay()
     }
     
     override func viewDidLayoutSubviews() {
-        let x = gridView.bounds
-        let y = gridView.frame
         drawCardsInPlay()
     }
     
     private func drawCardsInPlay() {
         gridView.subviews.forEach() { $0.removeFromSuperview() }
+        gridView.setCellCount(setGame.cardsInPlay.count)
         
-        var cardGrid = Grid(layout: Grid.Layout.aspectRatio(Constants.cardRatio), frame: gridView.frame)
-        let cardCount = setGame.cardsInPlay.count
-        cardGrid.cellCount = cardCount
-        
-        for (index, card) in setGame.cardsInPlay.enumerated() {
+        for card in setGame.cardsInPlay {
             let cardView = SetCardView()
             cardView.setVisualProperties(fromAttributes: card.attributes)
-            let cardBounds = cardGrid[index]!
-            let xInset = cardGridInsetRatio * cardBounds.width
-            let yInset = cardGridInsetRatio * cardBounds.height
-            cardView.frame = cardBounds.insetBy(dx: xInset, dy: yInset)
             gridView.addSubview(cardView)
+            gridView.setNeedsDisplay()
         }
     }
-    
-    let cardGridInsetRatio: CGFloat = 0.05
-
-
 }
 
