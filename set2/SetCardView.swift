@@ -26,6 +26,29 @@ class SetCardView: UIView {
     private var color: Color = Color.blue {
         didSet { setNeedsDisplay() }
     }
+    @IBInspectable
+    private var isSelected = true {
+        didSet { setNeedsDisplay() }
+    }
+    
+    // An id number
+    private var id: Int? = nil
+    
+    func setId(_ id: Int) {
+        self.id = id
+    }
+    
+    func getId() -> Int {
+        return id!
+    }
+    
+    func select() {
+        isSelected = true
+    }
+    
+    func deselect() {
+        isSelected = false
+    }
     
     func setVisualProperties(fromAttributes attributes: [Int]) {
         let shapeNum = attributes[0]
@@ -73,6 +96,13 @@ class SetCardView: UIView {
         let symbolBounds = SymbolBounds.splitIntoSymbolBounds(symbolsAreaBounds)
         UIColor.white.setFill()
         cardPath.fill()
+        
+        if isSelected {
+            cardPath.addClip() // Contain the stroke to within the path
+            cardPath.lineWidth = Constants.cardStrokeWidth * cardSize.width
+            Constants.selectedColor.setStroke()
+            cardPath.stroke()
+        }
         
         switch number {
         case .one:
@@ -215,7 +245,10 @@ internal struct Constants {
     fileprivate static let symbolInset: CGFloat = 0.1
     fileprivate static let alphaComponent: CGFloat = 0.45
     fileprivate static let strokeWidth: CGFloat = 0.05
+    fileprivate static let cardStrokeWidth: CGFloat = 0.08
     fileprivate static let equilateralTriangleHeightOffset: CGFloat = 0.06
+    
+    fileprivate static let selectedColor: UIColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
     
     internal static let cardRatio: CGFloat = 0.66 // card width to height
     fileprivate static let cornerRadiusRatio: CGFloat = 0.18 // card width to corner radius

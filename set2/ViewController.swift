@@ -28,7 +28,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         setGame.dealStartingCards()
         drawCardsInPlay()
     }
@@ -41,11 +40,35 @@ class ViewController: UIViewController {
         gridView.subviews.forEach() { $0.removeFromSuperview() }
         gridView.setCellCount(setGame.cardsInPlay.count)
         
-        for card in setGame.cardsInPlay {
+        for (index, card) in setGame.cardsInPlay.enumerated() {
             let cardView = SetCardView()
+            cardView.setId(index)
+            cardView.addGestureRecognizer(touchCardGestureRecognizer())
             cardView.setVisualProperties(fromAttributes: card.attributes)
+            if setGame.selectedCards.contains(card) {
+                cardView.select()
+            } else {
+                cardView.deselect()
+            }
             gridView.addSubview(cardView)
-            gridView.setNeedsDisplay()
+        }
+        gridView.setNeedsDisplay()
+    }
+    
+    private func touchCardGestureRecognizer() -> UITapGestureRecognizer {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.handleTouchCardGestureRecognizer(_:)))
+        return tapGestureRecognizer
+    }
+    
+    @objc
+    private func handleTouchCardGestureRecognizer(_ recognizer: UITapGestureRecognizer) {
+        switch recognizer.state {
+        case .ended:
+            let setCardView = recognizer.view as! SetCardView
+            let id = setCardView.getId()
+            setGame.touchCard(atIndex: id)
+            drawCardsInPlay()
+        default: break
         }
     }
 }
