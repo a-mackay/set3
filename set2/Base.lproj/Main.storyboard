@@ -22,31 +22,37 @@
                                 <rect key="frame" x="20" y="44" width="374" height="818"/>
                                 <subviews>
                                     <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PMp-pN-GPf" customClass="GridView" customModule="set2" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="733.66666666666663"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="716.66666666666663"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="26" translatesAutoresizingMaskIntoConstraints="NO" id="nLf-Aa-dt9">
-                                        <rect key="frame" x="86" y="741.66666666666663" width="202" height="76.333333333333371"/>
+                                        <rect key="frame" x="62" y="724.66666666666663" width="250" height="93.333333333333371"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uyN-Rw-iek">
-                                                <rect key="frame" x="69" y="0.0" width="64" height="20.333333333333332"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uyN-Rw-iek">
+                                                <rect key="frame" x="78.333333333333343" y="0.0" width="93.666666666666657" height="31.333333333333332"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="34" translatesAutoresizingMaskIntoConstraints="NO" id="spA-Lg-MhS">
-                                                <rect key="frame" x="0.0" y="46.333333333333371" width="202" height="30"/>
+                                                <rect key="frame" x="0.0" y="57.333333333333371" width="250" height="36"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IvN-2b-OeJ">
-                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
-                                                        <state key="normal" title="New Game"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IvN-2b-OeJ">
+                                                        <rect key="frame" x="0.0" y="0.0" width="97" height="36"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
+                                                        <state key="normal" title="New Game">
+                                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        </state>
                                                         <connections>
                                                             <action selector="touchNewGameButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vaB-NV-l5d"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hDa-MC-KzW">
-                                                        <rect key="frame" x="109" y="0.0" width="93" height="30"/>
-                                                        <state key="normal" title="Draw 3 Cards"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hDa-MC-KzW">
+                                                        <rect key="frame" x="131" y="0.0" width="119" height="36"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
+                                                        <state key="normal" title="Draw 3 Cards">
+                                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        </state>
                                                         <connections>
                                                             <action selector="touchDraw3CardsButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NCq-YD-GMk"/>
                                                         </connections>
@@ -71,6 +77,7 @@
                         <viewLayoutGuide key="safeArea" id="G3P-3A-KFX"/>
                     </view>
                     <connections>
+                        <outlet property="draw3CardsButton" destination="hDa-MC-KzW" id="VE3-3c-5OX"/>
                         <outlet property="gridView" destination="PMp-pN-GPf" id="4ve-uI-AYc"/>
                         <outlet property="scoreLabel" destination="uyN-Rw-iek" id="Wx6-ox-tdd"/>
                     </connections>

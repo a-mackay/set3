@@ -11,6 +11,8 @@ import UIKit
 class ViewController: UIViewController {
     private var setGame = SetGame()
 
+    @IBOutlet weak var draw3CardsButton: UIButton!
+    
     @IBOutlet weak var gridView: GridView!
     
     @IBOutlet weak var scoreLabel: UILabel!
@@ -22,17 +24,49 @@ class ViewController: UIViewController {
     }
     
     @IBAction func touchDraw3CardsButton(_ sender: UIButton) {
+        draw3Cards()
+    }
+    
+    private func draw3Cards() {
         setGame.dealThreeCards()
         drawCardsInPlay()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addGestureRecognizer(swipeDownGestureRecognizer())
+        view.addGestureRecognizer(rotateGestureRecognizer())
         setGame.dealStartingCards()
         drawCardsInPlay()
     }
     
     override func viewDidLayoutSubviews() {
+        drawCardsInPlay()
+    }
+    
+    private func shuffleCardsInPlay() {
+        setGame.shuffleCardsInPlay()
+        drawCardsInPlay()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        view.setNeedsDisplay()
+        view.setNeedsLayout()
+    }
+    
+    private func swipeDownGestureRecognizer() -> UISwipeGestureRecognizer {
+        let gestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeDownGestureRecognizer(_:)))
+        gestureRecognizer.direction = .down
+        return gestureRecognizer
+    }
+    
+    private func rotateGestureRecognizer() -> UIRotationGestureRecognizer {
+        let gestureRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(handleRotationGestureRecognizer(_:)))
+        return gestureRecognizer
+    }
+    
+    private func drawEverything() {
+        scoreLabel.text = "Score: \(setGame.score)"
         drawCardsInPlay()
     }
     
@@ -68,6 +102,25 @@ class ViewController: UIViewController {
             let id = setCardView.getId()
             setGame.touchCard(atIndex: id)
             drawCardsInPlay()
+        default: break
+        }
+    }
+    
+    @objc
+    private func handleSwipeDownGestureRecognizer(_ recognizer: UISwipeGestureRecognizer) {
+        switch recognizer.state {
+        case .ended:
+            draw3Cards()
+        default: break
+        }
+    }
+    
+    @objc
+    private func handleRotationGestureRecognizer(_ recognizer: UIRotationGestureRecognizer) {
+        switch recognizer.state {
+        case .ended:
+            shuffleCardsInPlay()
+            print("fired")
         default: break
         }
     }

@@ -74,6 +74,10 @@ class SetGame {
         dealCards(numberOfCards: 3)
     }
     
+    func shuffleCardsInPlay() {
+        self.cardsInPlay.shuffle()
+    }
+    
     func touchCard(atIndex index: Int) {
         if !cardsInPlay.indices.contains(index) {
             preconditionFailure("Index is not in the indices of the cards in play")
