@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     @IBAction func touchNewGameButton(_ sender: UIButton) {
         setGame = SetGame()
         setGame.dealStartingCards()
-        drawCardsInPlay()
+        drawEverything()
     }
     
     @IBAction func touchDraw3CardsButton(_ sender: UIButton) {
@@ -29,7 +29,7 @@ class ViewController: UIViewController {
     
     private func draw3Cards() {
         setGame.dealThreeCards()
-        drawCardsInPlay()
+        drawEverything()
     }
     
     override func viewDidLoad() {
@@ -37,11 +37,11 @@ class ViewController: UIViewController {
         view.addGestureRecognizer(swipeDownGestureRecognizer())
         view.addGestureRecognizer(rotateGestureRecognizer())
         setGame.dealStartingCards()
-        drawCardsInPlay()
+        drawEverything()
     }
     
     override func viewDidLayoutSubviews() {
-        drawCardsInPlay()
+        drawEverything()
     }
     
     private func shuffleCardsInPlay() {
@@ -68,6 +68,7 @@ class ViewController: UIViewController {
     private func drawEverything() {
         scoreLabel.text = "Score: \(setGame.score)"
         drawCardsInPlay()
+        draw3CardsButton.isEnabled = !setGame.isDeckEmpty()
     }
     
     private func drawCardsInPlay() {
@@ -101,7 +102,7 @@ class ViewController: UIViewController {
             let setCardView = recognizer.view as! SetCardView
             let id = setCardView.getId()
             setGame.touchCard(atIndex: id)
-            drawCardsInPlay()
+            drawEverything()
         default: break
         }
     }

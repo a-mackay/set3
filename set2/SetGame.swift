@@ -24,6 +24,10 @@ class SetGame {
         return SetGame.hasAMatch(selectedCards: self.selectedCards)
     }
     
+    func isDeckEmpty() -> Bool {
+        return deck.isEmpty
+    }
+    
     private static func hasAMatch(selectedCards: [Card]) -> Bool {
         if selectedCards.count == 3 {
             let firstCard = selectedCards[0]
