@@ -121,7 +121,6 @@ class ViewController: UIViewController {
         switch recognizer.state {
         case .ended:
             shuffleCardsInPlay()
-            print("fired")
         default: break
         }
     }
