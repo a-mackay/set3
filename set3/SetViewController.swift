@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class SetViewController: UIViewController {
     private var setGame = SetGame()
 
     @IBOutlet weak var draw3CardsButton: UIButton!
@@ -91,7 +91,7 @@ class ViewController: UIViewController {
     }
     
     private func touchCardGestureRecognizer() -> UITapGestureRecognizer {
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.handleTouchCardGestureRecognizer(_:)))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SetViewController.handleTouchCardGestureRecognizer(_:)))
         return tapGestureRecognizer
     }
     

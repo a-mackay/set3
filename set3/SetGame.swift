@@ -9,9 +9,9 @@
 import Foundation
 
 class SetGame {
-    private var deck = Card.createDefaultDeckOfCards().shuffled()
-    var cardsInPlay: [Card] = []
-    private(set) var selectedCards: [Card] = []
+    private var deck = SetCard.createDefaultDeckOfCards().shuffled()
+    var cardsInPlay: [SetCard] = []
+    private(set) var selectedCards: [SetCard] = []
     private(set) var score: Int = 0
     private var numberOfStartingCards = 12
     private var maxNumberOfCardsInPlay = 81
@@ -28,7 +28,7 @@ class SetGame {
         return deck.isEmpty
     }
     
-    private static func hasAMatch(selectedCards: [Card]) -> Bool {
+    private static func hasAMatch(selectedCards: [SetCard]) -> Bool {
         if selectedCards.count == 3 {
             let firstCard = selectedCards[0]
             let secondCard = selectedCards[1]
