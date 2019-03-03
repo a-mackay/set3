@@ -26,16 +26,18 @@ class ConcentrationThemeChooserViewController: UIViewController, UISplitViewCont
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
-        let destination = segue.destination
-        if let cvc = destination as? ConcentrationViewController, let button = sender as? UIButton {
-            switch button.title(for: .normal) {
-            case "Animals":
-                cvc.theme = ["🐶", "🐱", "🐭", "🐷", "🙈", "🐸", "🦁", "🐨"]
-            case "Faces":
-                cvc.theme = ["😀", "🤪", "🙁", "😡", "🤢", "🥶", "😈", "🤠"]
-            case "Sports":
-                cvc.theme = ["🏓", "🏸", "🥊", "🛹", "🏏", "⛳️", "🏈", "🎾"]
-            default: break
+        if segue.identifier == "ChooseTheme" {
+            let destination = segue.destination
+            if let cvc = destination as? ConcentrationViewController, let button = sender as? UIButton {
+                switch button.title(for: .normal) {
+                case "Animals":
+                    cvc.theme = ["🐶", "🐱", "🐭", "🐷", "🙈", "🐸", "🦁", "🐨"]
+                case "Faces":
+                    cvc.theme = ["😀", "🤪", "🙁", "😡", "🤢", "🥶", "😈", "🤠"]
+                case "Sports":
+                    cvc.theme = ["🏓", "🏸", "🥊", "🛹", "🏏", "⛳️", "🏈", "🎾"]
+                default: break
+                }
             }
         }
     }
