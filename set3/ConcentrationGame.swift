@@ -12,11 +12,6 @@ class ConcentrationGame {
     var cards = [ConcentrationCard]()
     var score = 0
     
-    func reset() {
-        score = 0
-        resetCards(numberOfCardPairs: (cards.count + 1) / 2)
-    }
-    
     func isGameComplete() -> Bool {
         return cards.allSatisfy { $0.isMatched }
     }
@@ -81,21 +76,7 @@ class ConcentrationGame {
     }
     
     init(numberOfCardPairs: Int) {
-        for _ in 0..<numberOfCardPairs {
-            let id = ConcentrationCard.getUniqueId()
-            let card = ConcentrationCard(id: id)
-            let matchingCard = ConcentrationCard(id: id)
-            cards.append(card)
-            cards.append(matchingCard)
-        }
-        cards.shuffle()
-    }
-    
-    func resetCards(numberOfCardPairs: Int) {
-        cards = []
-        ConcentrationCard.resetUniqueId()
-        for _ in 0..<numberOfCardPairs {
-            let id = ConcentrationCard.getUniqueId()
+        for id in 0..<numberOfCardPairs {
             let card = ConcentrationCard(id: id)
             let matchingCard = ConcentrationCard(id: id)
             cards.append(card)

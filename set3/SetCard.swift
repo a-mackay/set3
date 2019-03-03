@@ -10,7 +10,7 @@ import Foundation
 
 struct SetCard: Equatable {
     let attributes: [Int]
-
+    
     init(attributes: [Int]) {
         self.attributes = attributes
     }

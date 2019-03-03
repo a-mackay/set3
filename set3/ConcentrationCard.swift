@@ -13,17 +13,6 @@ class ConcentrationCard {
     var isMatched = false
     let id: Int
     
-    static var uniqueId = -1
-    
-    static func getUniqueId() -> Int {
-        uniqueId += 1
-        return uniqueId
-    }
-    
-    static func resetUniqueId() {
-        uniqueId = -1
-    }
-    
     init(id: Int) {
         self.id = id
     }
