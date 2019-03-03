@@ -8,12 +8,16 @@
 
 import UIKit
 
-class ConcentrationThemeChooserViewController: UIViewController {
+class ConcentrationThemeChooserViewController: UIViewController, UISplitViewControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+    }
+    
+    override func awakeFromNib() {
+        self.splitViewController?.delegate = self
     }
 
     // MARK: - Navigation
@@ -33,6 +37,14 @@ class ConcentrationThemeChooserViewController: UIViewController {
                 cvc.theme = ["🏓", "🏸", "🥊", "🛹", "🏏", "⛳️", "🏈", "🎾"]
             default: break
             }
+        }
+    }
+    
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
+        if let cvc = secondaryViewController as? ConcentrationViewController, cvc.theme == nil {
+            return true
+        } else {
+            return false
         }
     }
 

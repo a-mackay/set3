@@ -31,25 +31,29 @@ class ConcentrationViewController: UIViewController {
     @IBOutlet var cardButtons: [UIButton]!
     
     private func drawCards() {
-        for (index, card) in concentrationGame.cards.enumerated() {
-            let cardButton = cardButtons[index]
-            if card.isMatched {
-                cardButton.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
-                cardButton.setTitle("", for: .normal)
-                cardButton.isEnabled = false
-            } else if card.isFaceUp {
-                cardButton.isEnabled = true
-                cardButton.backgroundColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-                cardButton.setTitle(theme[card.id], for: .normal)
-            } else {
-                cardButton.isEnabled = true
-                cardButton.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
-                cardButton.setTitle("", for: .normal)
+        if theme != nil {
+            for (index, card) in concentrationGame.cards.enumerated() {
+                let cardButton = cardButtons[index]
+                if card.isMatched {
+                    cardButton.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+                    cardButton.setTitle("", for: .normal)
+                    cardButton.isEnabled = false
+                } else if card.isFaceUp {
+                    cardButton.isEnabled = true
+                    cardButton.backgroundColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
+                    cardButton.setTitle(theme![card.id], for: .normal)
+                } else {
+                    cardButton.isEnabled = true
+                    cardButton.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+                    cardButton.setTitle("", for: .normal)
+                }
             }
         }
     }
     
-    var theme = ["😀", "🤪", "🙁", "😡", "🤢", "🥶", "😈", "🤠"]
+    var theme: [String]? = nil//["😀", "🤪", "🙁", "😡", "🤢", "🥶", "😈", "🤠"]
+    
+    
     
     /*
     // MARK: - Navigation
