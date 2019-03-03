@@ -10,7 +10,7 @@ import UIKit
 
 class ConcentrationViewController: UIViewController {
     
-    private var concentrationGame = ConcentrationGame(numberOfCardPairs: 8)
+    var concentrationGame = ConcentrationGame(numberOfCardPairs: 8)
 
     override func viewDidLoad() {
         super.viewDidLoad()

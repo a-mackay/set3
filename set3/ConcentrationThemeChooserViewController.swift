@@ -9,6 +9,8 @@
 import UIKit
 
 class ConcentrationThemeChooserViewController: UIViewController, UISplitViewControllerDelegate {
+    
+    private var lastCvcWhichWasSeguedTo: ConcentrationViewController? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +31,9 @@ class ConcentrationThemeChooserViewController: UIViewController, UISplitViewCont
         if segue.identifier == "ChooseTheme" {
             let destination = segue.destination
             if let cvc = destination as? ConcentrationViewController, let button = sender as? UIButton {
+                if let existingGame = lastCvcWhichWasSeguedTo?.concentrationGame {
+                    cvc.concentrationGame = existingGame
+                }
                 switch button.title(for: .normal) {
                 case "Animals":
                     cvc.theme = ["🐶", "🐱", "🐭", "🐷", "🙈", "🐸", "🦁", "🐨"]
@@ -38,6 +43,7 @@ class ConcentrationThemeChooserViewController: UIViewController, UISplitViewCont
                     cvc.theme = ["🏓", "🏸", "🥊", "🛹", "🏏", "⛳️", "🏈", "🎾"]
                 default: break
                 }
+                lastCvcWhichWasSeguedTo = cvc
             }
         }
     }
