@@ -19,7 +19,7 @@ class SetViewController: UIViewController {
     
     @IBAction func touchNewGameButton(_ sender: UIButton) {
         setGame = SetGame()
-        setGame.dealStartingCards()
+        (0..<setGame.numberOfStartingCards).forEach { _ in setGame.dealCard() }
         drawEverything()
     }
     
@@ -28,14 +28,16 @@ class SetViewController: UIViewController {
     }
     
     private func draw3Cards() {
-        setGame.dealThreeCards()
+        setGame.dealCard()
+        setGame.dealCard()
+        setGame.dealCard()
         drawEverything()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addGestureRecognizer(swipeDownGestureRecognizer())
-        setGame.dealStartingCards()
+        (0..<setGame.numberOfStartingCards).forEach { _ in setGame.dealCard() }
         drawEverything()
     }
     

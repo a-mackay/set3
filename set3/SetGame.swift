@@ -14,12 +14,8 @@ class SetGame {
     private(set) var selectedCards: [SetCard] = []
     private(set) var score: Int = 0
     private var discardedCards: [SetCard] = []
-    private var numberOfStartingCards = 12
+    private(set) var numberOfStartingCards = 12
     private var maxNumberOfCardsInPlay = 81
-    
-    func dealStartingCards() {
-        dealCards(numberOfCards: numberOfStartingCards)
-    }
     
     func hasAMatch() -> Bool {
         return SetGame.hasAMatch(selectedCards: self.selectedCards)
@@ -75,8 +71,8 @@ class SetGame {
         }
     }
     
-    func dealThreeCards() {
-        dealCards(numberOfCards: 3)
+    func dealCard() {
+        dealCards(numberOfCards: 1)
     }
     
     func shuffleCardsInPlay() {
@@ -94,7 +90,6 @@ class SetGame {
             cardsInPlay.remove(elements: selectedCards)
             discardedCards.append(contentsOf: selectedCards)
             selectedCards.removeAll()
-            dealThreeCards()
             score = score + 1
         } else if selectedCards.count == 3 {
             selectedCards.removeAll()
