@@ -51,7 +51,7 @@ class ConcentrationViewController: UIViewController {
         }
     }
     
-    var theme: [String]? = nil//["😀", "🤪", "🙁", "😡", "🤢", "🥶", "😈", "🤠"]
+    var theme: [String]? = ["😀", "🤪", "🙁", "😡", "🤢", "🥶", "😈", "🤠"]
     
     
     

@@ -13,6 +13,7 @@ class SetGame {
     var cardsInPlay: [SetCard] = []
     private(set) var selectedCards: [SetCard] = []
     private(set) var score: Int = 0
+    private var discardedCards: [SetCard] = []
     private var numberOfStartingCards = 12
     private var maxNumberOfCardsInPlay = 81
     
@@ -91,6 +92,7 @@ class SetGame {
 
         if hasAMatch() {
             cardsInPlay.remove(elements: selectedCards)
+            discardedCards.append(contentsOf: selectedCards)
             selectedCards.removeAll()
             dealThreeCards()
             score = score + 1

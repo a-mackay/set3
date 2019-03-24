@@ -11,6 +11,14 @@ import UIKit
 @IBDesignable
 class SetCardView: UIView {
     @IBInspectable
+    var isFaceUp: Bool = false
+    
+    var isFaceDown: Bool {
+        get { return !isFaceUp }
+        set(newValue) { self.isFaceUp = !newValue }
+    }
+    
+    @IBInspectable
     private var shape: Shape = Shape.circle {
         didSet { setNeedsDisplay() }
     }
@@ -94,26 +102,39 @@ class SetCardView: UIView {
         
         let symbolsAreaBounds = cardSize.insetBy(dx: Constants.cardSymbolAreaInset * cardSize.width, dy: Constants.cardSymbolAreaInset * cardSize.height)
         let symbolBounds = SymbolBounds.splitIntoSymbolBounds(symbolsAreaBounds)
-        UIColor.white.setFill()
-        cardPath.fill()
+        
+        if isFaceUp {
+            UIColor.white.setFill()
+            cardPath.fill()
+            
+//            if isSelected {
+//                cardPath.addClip() // Contain the stroke to within the path
+//                cardPath.lineWidth = Constants.cardStrokeWidth * cardSize.width
+//                Constants.selectedColor.setStroke()
+//                cardPath.stroke()
+//            }
+            
+            switch number {
+            case .one:
+                drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.middle)
+            case .two:
+                drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.top)
+                drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.middle)
+            case .three:
+                drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.top)
+                drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.middle)
+                drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.bottom)
+            }
+        } else {
+            UIColor.blue.setFill()
+            cardPath.fill()
+        }
         
         if isSelected {
             cardPath.addClip() // Contain the stroke to within the path
             cardPath.lineWidth = Constants.cardStrokeWidth * cardSize.width
             Constants.selectedColor.setStroke()
             cardPath.stroke()
-        }
-        
-        switch number {
-        case .one:
-            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.middle)
-        case .two:
-            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.top)
-            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.middle)
-        case .three:
-            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.top)
-            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.middle)
-            drawSymbol(withShape: shape, andShading: shading, andColor: color, withinBounds: symbolBounds.bottom)
         }
     }
     
