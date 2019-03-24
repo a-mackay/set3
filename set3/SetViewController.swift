@@ -35,7 +35,6 @@ class SetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addGestureRecognizer(swipeDownGestureRecognizer())
-        view.addGestureRecognizer(rotateGestureRecognizer())
         setGame.dealStartingCards()
         drawEverything()
     }
@@ -59,12 +58,7 @@ class SetViewController: UIViewController {
         gestureRecognizer.direction = .down
         return gestureRecognizer
     }
-    
-    private func rotateGestureRecognizer() -> UIRotationGestureRecognizer {
-        let gestureRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(handleRotationGestureRecognizer(_:)))
-        return gestureRecognizer
-    }
-    
+
     private func drawEverything() {
         scoreLabel.text = "Score: \(setGame.score)"
         drawCardsInPlay()
@@ -112,15 +106,6 @@ class SetViewController: UIViewController {
         switch recognizer.state {
         case .ended:
             draw3Cards()
-        default: break
-        }
-    }
-    
-    @objc
-    private func handleRotationGestureRecognizer(_ recognizer: UIRotationGestureRecognizer) {
-        switch recognizer.state {
-        case .ended:
-            shuffleCardsInPlay()
         default: break
         }
     }
