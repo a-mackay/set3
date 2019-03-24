@@ -72,7 +72,7 @@ class SetViewController: UIViewController {
     }
     
     private func drawCardsInPlay() {
-        gridView.subviews.forEach() { $0.removeFromSuperview() }
+        gridView.removeViewsForCardsInPlay()
         gridView.setCellCount(setGame.cardsInPlay.count)
         
         for (index, card) in setGame.cardsInPlay.enumerated() {

@@ -11,7 +11,7 @@ import UIKit
 @IBDesignable
 class SetCardView: UIView {
     @IBInspectable
-    var isFaceUp: Bool = false
+    var isFaceUp: Bool = true
     
     var isFaceDown: Bool {
         get { return !isFaceUp }
@@ -92,6 +92,10 @@ class SetCardView: UIView {
         default: fatalError("Invalid color number :\(colorNum)")
         }
         
+        setBackgroundInvisible()
+    }
+    
+    internal func setBackgroundInvisible() {
         self.backgroundColor = UIColor.clear
         self.isOpaque = false
     }
@@ -99,6 +103,8 @@ class SetCardView: UIView {
     override func draw(_ rect: CGRect) {
         let cardSize = getCardBounds(fromBounds: self.bounds)
         let cardPath = UIBezierPath(roundedRect: cardSize, cornerRadius: cardSize.width * Constants.cornerRadiusRatio)
+        cardPath.addClip() // Contain the stroke to within the path
+
         
         let symbolsAreaBounds = cardSize.insetBy(dx: Constants.cardSymbolAreaInset * cardSize.width, dy: Constants.cardSymbolAreaInset * cardSize.height)
         let symbolBounds = SymbolBounds.splitIntoSymbolBounds(symbolsAreaBounds)
@@ -106,13 +112,6 @@ class SetCardView: UIView {
         if isFaceUp {
             UIColor.white.setFill()
             cardPath.fill()
-            
-//            if isSelected {
-//                cardPath.addClip() // Contain the stroke to within the path
-//                cardPath.lineWidth = Constants.cardStrokeWidth * cardSize.width
-//                Constants.selectedColor.setStroke()
-//                cardPath.stroke()
-//            }
             
             switch number {
             case .one:
@@ -131,7 +130,6 @@ class SetCardView: UIView {
         }
         
         if isSelected {
-            cardPath.addClip() // Contain the stroke to within the path
             cardPath.lineWidth = Constants.cardStrokeWidth * cardSize.width
             Constants.selectedColor.setStroke()
             cardPath.stroke()
@@ -259,7 +257,13 @@ class SetCardView: UIView {
         }
     }
     
-    
+    static func defaultFaceDown() -> SetCardView {
+        let view = SetCardView()
+        view.deselect()
+        view.isFaceDown = true
+        view.setBackgroundInvisible()
+        return view
+    }
 }
 
 internal struct Constants {
