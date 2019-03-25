@@ -45,11 +45,6 @@ class SetViewController: UIViewController {
         drawEverything()
     }
     
-    private func shuffleCardsInPlay() {
-        setGame.shuffleCardsInPlay()
-        drawCardsInPlay()
-    }
-    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         view.setNeedsDisplay()
         view.setNeedsLayout()
@@ -76,7 +71,7 @@ class SetViewController: UIViewController {
             cardView.setId(card.id)
             cardView.addGestureRecognizer(touchCardGestureRecognizer())
             cardView.setVisualProperties(fromAttributes: card.attributes)
-            if setGame.selectedCards.contains(card) {
+            if setGame.isCardSelected(card) {
                 cardView.select()
             } else {
                 cardView.deselect()

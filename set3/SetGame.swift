@@ -10,19 +10,31 @@ import Foundation
 
 class SetGame {
     private var deck = SetCard.createDefaultDeckOfCards().shuffled()
-    var cardsInPlay: [SetCard] = []
-    private(set) var selectedCards: [SetCard] = []
+    private(set) var cardsInPlay: [SetCard] = []
+    private var selectedCards: [SetCard] = []
     private(set) var score: Int = 0
     private var discardedCards: [SetCard] = []
     private(set) var numberOfStartingCards = 12
     private var maxNumberOfCardsInPlay = 81
     
-    func hasAMatch() -> Bool {
+    private func hasAMatch() -> Bool {
         return SetGame.hasAMatch(selectedCards: self.selectedCards)
     }
     
-    func isDeckEmpty() -> Bool {
+    internal func isDeckEmpty() -> Bool {
         return deck.isEmpty
+    }
+    
+    internal func isDiscardEmpty() -> Bool {
+        return discardedCards.isEmpty
+    }
+    
+    internal func isInPlay(_ card: SetCard) -> Bool {
+        return cardsInPlay.contains(card)
+    }
+    
+    internal func isCardSelected(_ card: SetCard) -> Bool {
+        return selectedCards.contains(card)
     }
     
     private static func hasAMatch(selectedCards: [SetCard]) -> Bool {
@@ -73,10 +85,6 @@ class SetGame {
     
     func dealCard() {
         dealCards(numberOfCards: 1)
-    }
-    
-    func shuffleCardsInPlay() {
-        self.cardsInPlay.shuffle()
     }
     
     func touchCard(withId id: Int) {
