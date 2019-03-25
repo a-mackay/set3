@@ -13,7 +13,7 @@ class SetViewController: UIViewController {
 
     @IBOutlet weak var draw3CardsButton: UIButton!
     
-    @IBOutlet weak var gridView: GridView!
+    @IBOutlet weak var gridView: SetGridView!
     
     @IBOutlet weak var scoreLabel: UILabel!
     

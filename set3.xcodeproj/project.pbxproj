@@ -20,7 +20,7 @@
 		317F5DCB2205792800377DC9 /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317F5DC82205792800377DC9 /* SetGame.swift */; };
 		317F5DCD220579E300377DC9 /* SetCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317F5DCC220579E300377DC9 /* SetCardView.swift */; };
 		31C13E38222B6A28005A0AE6 /* ConcentrationThemeChooserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C13E37222B6A28005A0AE6 /* ConcentrationThemeChooserViewController.swift */; };
-		31DEF1D6220C262E0096B1D7 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEF1D5220C262E0096B1D7 /* GridView.swift */; };
+		31DEF1D6220C262E0096B1D7 /* SetGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DEF1D5220C262E0096B1D7 /* SetGridView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +39,7 @@
 		317F5DC82205792800377DC9 /* SetGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
 		317F5DCC220579E300377DC9 /* SetCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardView.swift; sourceTree = "<group>"; };
 		31C13E37222B6A28005A0AE6 /* ConcentrationThemeChooserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcentrationThemeChooserViewController.swift; sourceTree = "<group>"; };
-		31DEF1D5220C262E0096B1D7 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
+		31DEF1D5220C262E0096B1D7 /* SetGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGridView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +86,7 @@
 				317F5DBD220578F500377DC9 /* LaunchScreen.storyboard */,
 				317F5DC0220578F500377DC9 /* Info.plist */,
 				317F5DCC220579E300377DC9 /* SetCardView.swift */,
-				31DEF1D5220C262E0096B1D7 /* GridView.swift */,
+				31DEF1D5220C262E0096B1D7 /* SetGridView.swift */,
 			);
 			path = set3;
 			sourceTree = "<group>";
@@ -166,7 +166,7 @@
 				317F5DCD220579E300377DC9 /* SetCardView.swift in Sources */,
 				316F3928222544D700364CA0 /* ConcentrationViewController.swift in Sources */,
 				317F5DC92205792800377DC9 /* SetCard.swift in Sources */,
-				31DEF1D6220C262E0096B1D7 /* GridView.swift in Sources */,
+				31DEF1D6220C262E0096B1D7 /* SetGridView.swift in Sources */,
 				317F5DCB2205792800377DC9 /* SetGame.swift in Sources */,
 				317F5DB5220578F400377DC9 /* AppDelegate.swift in Sources */,
 				317F5DCA2205792800377DC9 /* Grid.swift in Sources */,

@@ -11,7 +11,12 @@ import UIKit
 // Holds a grid of set card views, a deck and a discard pile.
 // Deck will be first subview
 // Discard will be second subview
-class GridView: UIView {
+class SetGridView: UIView {
+    // Similarly to how a SetCardView has some internal state which it uses to render
+    // itself, a SetGridView should have some internal state which it uses to render
+    // itself.
+    // TODO what state to put in here???
+    
     private var deckCardView = SetCardView.defaultFaceDown() // a facedown default card view
     
     private var discardPileCardView = SetCardView.defaultFaceDown() // a facedown default card view
