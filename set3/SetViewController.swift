@@ -71,9 +71,9 @@ class SetViewController: UIViewController {
         gridView.removeViewsForCardsInPlay()
         gridView.setCellCount(setGame.cardsInPlay.count)
         
-        for (index, card) in setGame.cardsInPlay.enumerated() {
+        for card in setGame.cardsInPlay {
             let cardView = SetCardView()
-            cardView.setId(index)
+            cardView.setId(card.id)
             cardView.addGestureRecognizer(touchCardGestureRecognizer())
             cardView.setVisualProperties(fromAttributes: card.attributes)
             if setGame.selectedCards.contains(card) {
@@ -97,7 +97,7 @@ class SetViewController: UIViewController {
         case .ended:
             let setCardView = recognizer.view as! SetCardView
             let id = setCardView.getId()
-            setGame.touchCard(atIndex: id)
+            setGame.touchCard(withId: id)
             drawEverything()
         default: break
         }

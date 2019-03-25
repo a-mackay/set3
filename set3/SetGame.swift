@@ -79,28 +79,26 @@ class SetGame {
         self.cardsInPlay.shuffle()
     }
     
-    func touchCard(atIndex index: Int) {
-        if !cardsInPlay.indices.contains(index) {
-            preconditionFailure("Index is not in the indices of the cards in play")
-        }
-        
-        let touchedCard = cardsInPlay[index]
-
-        if hasAMatch() {
-            cardsInPlay.remove(elements: selectedCards)
-            discardedCards.append(contentsOf: selectedCards)
-            selectedCards.removeAll()
-            score = score + 1
-        } else if selectedCards.count == 3 {
-            selectedCards.removeAll()
-            selectedCards.append(touchedCard)
-            score = score - 5
-        } else {
-            if let index = selectedCards.index(of: touchedCard) {
-                selectedCards.remove(at: index)
+    func touchCard(withId id: Int) {
+        if let matchingCard = cardsInPlay.first(where: { card in card.id == id }) {
+            if hasAMatch() {
+                cardsInPlay.remove(elements: selectedCards)
+                discardedCards.append(contentsOf: selectedCards)
+                selectedCards.removeAll()
+                score = score + 1
+            } else if selectedCards.count == 3 {
+                selectedCards.removeAll()
+                selectedCards.append(matchingCard)
+                score = score - 5
             } else {
-                selectedCards.append(touchedCard)
+                if let index = selectedCards.index(of: matchingCard) {
+                    selectedCards.remove(at: index)
+                } else {
+                    selectedCards.append(matchingCard)
+                }
             }
+        } else {
+            preconditionFailure("Card is not in the indices of the cards in play")
         }
     }
 }
