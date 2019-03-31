@@ -12,8 +12,8 @@ class SetGridView: UIView {
     internal func addCard(_ card: SetCard, wasDeckEmptied: Bool) {
         // Create card view:
         let cardView = SetCardView()
-//        cardView.alpha = 0.0
-//        cardView.isFaceDown = true
+        cardView.alpha = 0.0
+//        cardView.isFaceUp = false
         cardView.setId(card.id)
         cardView.addGestureRecognizer(touchCardGestureRecognizer())
         cardView.setVisualProperties(fromAttributes: card.attributes)
@@ -36,38 +36,45 @@ class SetGridView: UIView {
                 UIViewPropertyAnimator.runningPropertyAnimator(
                     withDuration: 1.0,
                     delay: 0.0,
-                    options: [.beginFromCurrentState],
+                    options: [],
                     animations: { view.frame = newFrame }
                 )
             }
         }
         
+        let newDeckFrame = getFrameForSubview(deckCardView)
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 1.0,
+            delay: 0.0,
+            options: [.beginFromCurrentState],
+            animations: { [weak self] in
+                self?.deckCardView.frame = newDeckFrame
+            },
+            completion: { uiViewAnimatingPosition in
+                cardView.alpha = 1.0
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 1.0,
+                    delay: 0.0,
+                    options: [],
+                    animations: { [weak self] in
+                        if let newCardFrame = self?.getFrameForSubview(cardView) {
+                            cardView.frame = newCardFrame
+                        }
+                    }
+                )
+//                UIView.transition(
+//                    with: cardView,
+//                    duration: 1.0,
+//                    options: [.transitionFlipFromLeft],
+//                    animations: { cardView.isFaceUp = true }
+//                )
+                
+        }
+        )
+        
         if wasDeckEmptied {
             deckCardView.alpha = 0.0
             deckCardView.isHidden = true
-        } else {
-            let newDeckFrame = getFrameForSubview(deckCardView)
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 1.0,
-                delay: 0.0,
-                options: [.beginFromCurrentState],
-                animations: { [weak self] in
-                    self?.deckCardView.frame = newDeckFrame
-                },
-                completion: { uiViewAnimatingPosition in
-                    UIViewPropertyAnimator.runningPropertyAnimator(
-                        withDuration: 1.0,
-                        delay: 0.0,
-                        options: [.beginFromCurrentState],
-                        animations: { [weak self] in
-                            if let newCardFrame = self?.getFrameForSubview(cardView) {
-                                cardView.frame = newCardFrame
-                            }
-                            cardView.alpha = 1.0
-                        }
-                    )
-                }
-            )
         }
         
         // Then, move the new card from the deck position to its actual position:

@@ -13,11 +13,6 @@ class SetCardView: UIView {
     @IBInspectable
     var isFaceUp: Bool = true
     
-    var isFaceDown: Bool {
-        get { return !isFaceUp }
-        set(newValue) { self.isFaceUp = !newValue }
-    }
-    
     @IBInspectable
     private var shape: Shape = Shape.circle {
         didSet { setNeedsDisplay() }
@@ -260,7 +255,7 @@ class SetCardView: UIView {
     static func defaultFaceDown() -> SetCardView {
         let view = SetCardView()
         view.deselect()
-        view.isFaceDown = true
+        view.isFaceUp = false
         view.setBackgroundInvisible()
         return view
     }

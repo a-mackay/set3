@@ -24,9 +24,10 @@ class SetViewController: UIViewController {
     private func reset() {
         setGame = SetGame()
         gridView.resetToInitialState()
-        (0..<setGame.numberOfStartingCards).forEach { _ in
-            draw1Card()
-        }
+//        (0..<setGame.numberOfStartingCards).forEach { _ in
+//            draw1Card()
+//        }
+        draw1Card()
         drawEverything()
     }
     
@@ -42,8 +43,8 @@ class SetViewController: UIViewController {
     
     private func draw3Cards() {
         draw1Card()
-        draw1Card()
-        draw1Card()
+//        draw1Card()
+//        draw1Card()
         drawEverything()
     }
     
