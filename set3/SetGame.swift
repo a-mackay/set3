@@ -74,17 +74,14 @@ class SetGame {
         return set.count == 3
     }
     
-    private func dealCards(numberOfCards: Int) {
-        for _ in 1...numberOfCards {
-            if deck.count > 0 && cardsInPlay.count < maxNumberOfCardsInPlay {
-                let dealtCard = deck.remove(at: 0)
-                cardsInPlay.append(dealtCard)
-            }
+    func dealCard() -> SetCard? {
+        if deck.count > 0 && cardsInPlay.count < maxNumberOfCardsInPlay {
+            let dealtCard = deck.remove(at: 0)
+            cardsInPlay.append(dealtCard)
+            return dealtCard
+        } else {
+            return nil
         }
-    }
-    
-    func dealCard() {
-        dealCards(numberOfCards: 1)
     }
     
     func touchCard(withId id: Int) {

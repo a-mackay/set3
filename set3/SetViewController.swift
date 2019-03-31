@@ -18,9 +18,15 @@ class SetViewController: UIViewController {
     @IBOutlet weak var scoreLabel: UILabel!
     
     @IBAction func touchNewGameButton(_ sender: UIButton) {
+        reset()
+    }
+    
+    private func reset() {
         setGame = SetGame()
-        (0..<setGame.numberOfStartingCards).forEach { _ in setGame.dealCard() }
         gridView.resetToInitialState()
+        (0..<setGame.numberOfStartingCards).forEach { _ in
+            draw1Card()
+        }
         drawEverything()
     }
     
@@ -28,19 +34,23 @@ class SetViewController: UIViewController {
         draw3Cards()
     }
     
+    private func draw1Card() {
+        if let dealtCard = setGame.dealCard() {
+            gridView.addCard(dealtCard, wasDeckEmptied: setGame.isDeckEmpty())
+        }
+    }
+    
     private func draw3Cards() {
-        setGame.dealCard()
-        setGame.dealCard()
-        setGame.dealCard()
+        draw1Card()
+        draw1Card()
+        draw1Card()
         drawEverything()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addGestureRecognizer(swipeDownGestureRecognizer())
-        (0..<setGame.numberOfStartingCards).forEach { _ in setGame.dealCard() }
-        gridView.resetToInitialState()
-        drawEverything()
+        reset()
     }
     
     override func viewDidLayoutSubviews() {

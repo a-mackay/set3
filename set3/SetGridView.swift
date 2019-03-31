@@ -9,135 +9,137 @@
 import UIKit
 
 class SetGridView: UIView {
-    struct State {
-        var showDeck = true
-        var showDiscard = false
-        var orderedCards: [SetCard] = []
-    }
-    
-    var state = State()
-    
-    internal func resetToInitialState() {
-        subviews.forEach { $0.removeFromSuperview() }
-        state = State()
-        self.deckCardView.frame = getFrameOfDeckView(forOrderedCards: state.orderedCards)
-        self.deckCardView.isHidden = !state.showDeck
-        self.discardPileCardView.frame = getFrameOfDiscardView(forOrderedCards: state.orderedCards)
-        self.discardPileCardView.isHidden = !state.showDiscard
-        self.addSubview(deckCardView)
-        self.addSubview(discardPileCardView)
-        self.deckCardView.setNeedsDisplay()
-        if (state.showDeck) {
-            self.deckCardView.alpha = 1.0
-        } else {
-            self.deckCardView.alpha = 0.0
-        }
-        self.discardPileCardView.setNeedsDisplay()
-        if (state.showDiscard) {
-            self.discardPileCardView.alpha = 1.0
-        } else {
-            self.discardPileCardView.alpha = 0.0
-        }
-        self.setNeedsDisplay()
-    }
-    
-    internal func updateStateFromSetGame(_ setGame: SetGame) {
-        let newState = State(
-            showDeck: !setGame.isDeckEmpty(),
-            showDiscard: !setGame.isDiscardEmpty(),
-            orderedCards: setGame.cardsInPlay
-        )
-        let newDeckFrame = getFrameOfDeckView(forOrderedCards: newState.orderedCards)
-        let newDiscardFrame = getFrameOfDiscardView(forOrderedCards: newState.orderedCards)
+    internal func addCard(_ card: SetCard, wasDeckEmptied: Bool) {
+        // Create card view:
+        let cardView = SetCardView()
+//        cardView.alpha = 0.0
+//        cardView.isFaceDown = true
+        cardView.setId(card.id)
+        cardView.addGestureRecognizer(touchCardGestureRecognizer())
+        cardView.setVisualProperties(fromAttributes: card.attributes)
+        cardView.deselect()
         
-        let newCardsInPlay = setGame.cardsInPlay.filter { !self.state.orderedCards.contains($0) }
-        let cardsWhichWereAlreadyInPlay = setGame.cardsInPlay.filter { self.state.orderedCards.contains($0) }
+        // Rearrange the subview hierarchy:
+        addSubview(cardView)
+        sendSubviewToBack(discardPileCardView)
+        sendSubviewToBack(deckCardView)
         
-        UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.3,
-            delay: 0.0,
-            options: [.beginFromCurrentState],
-            animations: { [weak self] in
-                self?.deckCardView.frame = newDeckFrame
-                self?.discardPileCardView.frame = newDiscardFrame
-            },
-            completion: { [weak self] uiViewAnimatingPosition in
-                for newCard in newCardsInPlay {
-                    self?.drawNewCard(newCard, startingAtDeckFrame: newDeckFrame)
-                }
+        // Initially position the new card where the deck is:
+        cardView.frame = getFrameForSubview(deckCardView)
+        
+        // Update positions of other subviews which were already on-screen:
+        for view in subviews {
+            let isNotTheNewCard = (view as? SetCardView) != cardView
+            let isTheDeck = (view as? SetCardView) == deckCardView
+            if isNotTheNewCard && !isTheDeck {
+                let newFrame = getFrameForSubview(view)
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 1.0,
+                    delay: 0.0,
+                    options: [.beginFromCurrentState],
+                    animations: { view.frame = newFrame }
+                )
             }
-        )
-        for card in cardsWhichWereAlreadyInPlay {
-            if let matchingSetCardView = (subviews.filter { ($0 as? SetCardView)?.getId() == card.id }).first as? SetCardView {
-                if let newCardFrame = getFrameOfCard(card, forOrderedCards: newState.orderedCards) {
+        }
+        
+        if wasDeckEmptied {
+            deckCardView.alpha = 0.0
+            deckCardView.isHidden = true
+        } else {
+            let newDeckFrame = getFrameForSubview(deckCardView)
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 1.0,
+                delay: 0.0,
+                options: [.beginFromCurrentState],
+                animations: { [weak self] in
+                    self?.deckCardView.frame = newDeckFrame
+                },
+                completion: { uiViewAnimatingPosition in
                     UIViewPropertyAnimator.runningPropertyAnimator(
-                        withDuration: 0.3,
+                        withDuration: 1.0,
                         delay: 0.0,
                         options: [.beginFromCurrentState],
-                        animations: {
-                            matchingSetCardView.frame = newCardFrame
+                        animations: { [weak self] in
+                            if let newCardFrame = self?.getFrameForSubview(cardView) {
+                                cardView.frame = newCardFrame
+                            }
+                            cardView.alpha = 1.0
                         }
                     )
                 }
-            }
+            )
         }
         
-//        let newOrderOfCards = setGame.cardsInPlay
-//        let newCardsInPlay = setGame.cardsInPlay.filter { !self.orderedCards.contains($0) }
-//        for newCard in newCardsInPlay {
-//            let newCardView = drawNewCard(newCard)
-//            let newCardViewFrame = getInsetFrame(fromGrid: getGrid(forOrderedCards: newOrderOfCards), forIndex: setGame.cardsInPlay.index(of: newCard)!)
-//            UIViewPropertyAnimator.runningPropertyAnimator(
-//                withDuration: 1.0,
-//                delay: 0.0,
-//                options: [.beginFromCurrentState],
-//                animations: { newCardView.frame = newCardViewFrame }
-//            )
-//        }
-//
-//        showDeck = !setGame.isDeckEmpty()
-//        showDiscard = !setGame.isDiscardEmpty()
-//        orderedCards = setGame.cardsInPlay
+        // Then, move the new card from the deck position to its actual position:
+//        let cardFrame = getFrameForSubview(cardView)
+//        UIViewPropertyAnimator.runningPropertyAnimator(
+//            withDuration: 1.0,
+//            delay: 1.0,
+//            options: [.beginFromCurrentState],
+//            animations: { cardView.frame = cardFrame }
+//        )
+        
+        subviews.forEach { $0.setNeedsDisplay() }
     }
     
-    private func drawNewCard(_ newCard: SetCard, startingAtDeckFrame deckFrame: CGRect) {
-        let cardView = SetCardView()
-        cardView.frame = deckFrame
-        cardView.setId(newCard.id)
-        cardView.addGestureRecognizer(touchCardGestureRecognizer())
-        cardView.setVisualProperties(fromAttributes: newCard.attributes)
-        cardView.deselect()
-        self.addSubview(cardView)
-        cardView.setNeedsDisplay()
-        self.setNeedsDisplay()
+    private func isACardInPlay(_ view: UIView) -> Bool {
+        let cardView = view as? SetCardView
+        return cardView != deckCardView && cardView != discardPileCardView
     }
     
-    private func getGrid(forOrderedCards cards: [SetCard]) -> Grid {
-        var cardGrid = Grid(layout: Grid.Layout.aspectRatio(Constants.cardRatio), frame: bounds)
-        cardGrid.cellCount = cards.count + 2 // extra 2 is the deck and discard piles
-        return cardGrid
+    internal func discardCard(_ card: SetCard, wasDiscardStarted: Bool) {
+        //
     }
     
-    private func getFrameOfDeckView(forOrderedCards cards: [SetCard]) -> CGRect {
-        let cardGrid = getGrid(forOrderedCards: cards)
-        let lastIndex = cardGrid.cellCount - 1
-        return getInsetFrame(fromGrid: cardGrid, forIndex: lastIndex) // Should always be two indices in cardGrid
-    }
-    
-    private func getFrameOfDiscardView(forOrderedCards cards: [SetCard]) -> CGRect {
-        let cardGrid = getGrid(forOrderedCards: cards)
-        let secondLastIndex = cardGrid.cellCount - 2
-        return getInsetFrame(fromGrid: cardGrid, forIndex: secondLastIndex) // Should always be two indices in cardGrid
-    }
-    
-    private func getFrameOfCard(_ card: SetCard, forOrderedCards orderedCards: [SetCard]) -> CGRect? {
-        let cardGrid = getGrid(forOrderedCards: orderedCards)
-        if let cardIndex = orderedCards.index(of: card) {
-            return getInsetFrame(fromGrid: cardGrid, forIndex: cardIndex)
+    private func getFrameForSubview(_ view: UIView) -> CGRect {
+        if let index = subviews.index(of: view) {
+            var grid = Grid(layout: Grid.Layout.aspectRatio(Constants.cardRatio), frame: bounds)
+            grid.cellCount = subviews.count
+            return getInsetFrame(fromGrid: grid, forIndex: index)
         } else {
-            return nil
+            preconditionFailure("view wasn't a subview of SetGridView object")
         }
     }
+    
+    internal func resetToInitialState() {
+        subviews.forEach { $0.removeFromSuperview() }
+        resetUiView(deckCardView, isVisible: true)
+        resetUiView(discardPileCardView, isVisible: false)
+        addSubview(discardPileCardView)
+        addSubview(deckCardView)
+        deckCardView.frame = getFrameForSubview(deckCardView)
+        discardPileCardView.frame = getFrameForSubview(discardPileCardView)
+        deckCardView.setNeedsDisplay()
+        discardPileCardView.setNeedsDisplay()
+    }
+    
+    private func resetUiView(_ view: UIView, isVisible: Bool) {
+        if (isVisible) {
+            view.isHidden = false
+            view.alpha = 1.0
+        } else {
+            view.isHidden = true
+            view.alpha = 0.0
+        }
+        view.setNeedsDisplay()
+    }
+    
+    internal func updateStateFromSetGame(_ setGame: SetGame) {
+//        UIViewPropertyAnimator.runningPropertyAnimator(
+//            withDuration: 0.3,
+//            delay: 0.0,
+//            options: [.beginFromCurrentState],
+//            animations: { [weak self] in
+//                self?.deckCardView.frame = newDeckFrame
+//                self?.discardPileCardView.frame = newDiscardFrame
+//            },
+//            completion: { [weak self] uiViewAnimatingPosition in
+//                for newCard in newCardsInPlay {
+//                    self?.drawNewCard(newCard, startingAtDeckFrame: newDeckFrame)
+//                }
+//            }
+//        )
+        }
     
     private func getInsetFrame(fromGrid grid: Grid, forIndex index: Int) -> CGRect {
         let frame = grid[index]!
@@ -213,12 +215,6 @@ class SetGridView: UIView {
         view.frame = cardBounds.insetBy(dx: xInset, dy: yInset)
         view.setNeedsDisplay()
     }
-    
-//    internal func removeViewsForCardsInPlay() {
-//        self.subviews.forEach { $0.removeFromSuperview() }
-//        self.addSubview(deckCardView)
-//        self.addSubview(discardPileCardView)
-//    }
-    
+
     private var cardGridInsetRatio: CGFloat = 0.03
 }
