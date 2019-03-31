@@ -20,6 +20,7 @@ class SetViewController: UIViewController {
     @IBAction func touchNewGameButton(_ sender: UIButton) {
         setGame = SetGame()
         (0..<setGame.numberOfStartingCards).forEach { _ in setGame.dealCard() }
+        gridView.resetToInitialState()
         drawEverything()
     }
     
@@ -38,6 +39,7 @@ class SetViewController: UIViewController {
         super.viewDidLoad()
         view.addGestureRecognizer(swipeDownGestureRecognizer())
         (0..<setGame.numberOfStartingCards).forEach { _ in setGame.dealCard() }
+        gridView.resetToInitialState()
         drawEverything()
     }
     
@@ -58,28 +60,29 @@ class SetViewController: UIViewController {
 
     private func drawEverything() {
         scoreLabel.text = "Score: \(setGame.score)"
-        drawCardsInPlay()
+//        drawCardsInPlay()
+        self.gridView.updateStateFromSetGame(self.setGame)
         draw3CardsButton.isEnabled = !setGame.isDeckEmpty()
     }
     
-    private func drawCardsInPlay() {
-        gridView.removeViewsForCardsInPlay()
-        gridView.setCellCount(setGame.cardsInPlay.count)
-        
-        for card in setGame.cardsInPlay {
-            let cardView = SetCardView()
-            cardView.setId(card.id)
-            cardView.addGestureRecognizer(touchCardGestureRecognizer())
-            cardView.setVisualProperties(fromAttributes: card.attributes)
-            if setGame.isCardSelected(card) {
-                cardView.select()
-            } else {
-                cardView.deselect()
-            }
-            gridView.addSubview(cardView)
-        }
-        gridView.setNeedsDisplay()
-    }
+//    private func drawCardsInPlay() {
+//        gridView.removeViewsForCardsInPlay()
+//        gridView.setCellCount(setGame.cardsInPlay.count)
+//        
+//        for card in setGame.cardsInPlay {
+//            let cardView = SetCardView()
+//            cardView.setId(card.id)
+//            cardView.addGestureRecognizer(touchCardGestureRecognizer())
+//            cardView.setVisualProperties(fromAttributes: card.attributes)
+//            if setGame.isCardSelected(card) {
+//                cardView.select()
+//            } else {
+//                cardView.deselect()
+//            }
+//            gridView.addSubview(cardView)
+//        }
+//        gridView.setNeedsDisplay()
+//    }
     
     private func touchCardGestureRecognizer() -> UITapGestureRecognizer {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SetViewController.handleTouchCardGestureRecognizer(_:)))
@@ -87,7 +90,7 @@ class SetViewController: UIViewController {
     }
     
     @objc
-    private func handleTouchCardGestureRecognizer(_ recognizer: UITapGestureRecognizer) {
+    internal func handleTouchCardGestureRecognizer(_ recognizer: UITapGestureRecognizer) {
         switch recognizer.state {
         case .ended:
             let setCardView = recognizer.view as! SetCardView
